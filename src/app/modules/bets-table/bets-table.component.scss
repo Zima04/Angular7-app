@@ -1,0 +1,41 @@
+/deep/.ui-table{
+  padding-top: 260px!important;
+}
+
+/deep/.ui-table table{
+  width: auto!important;
+}
+
+.filters-container{
+  display: flex;
+  flex-direction: row;
+
+  div{
+    margin: 10px;
+  }
+}
+
+.download-container{
+  display: flex;
+  padding: 10px;
+  justify-content: space-between;
+}
+
+/deep/.ui-table-caption{
+  position: fixed!important;
+  top: 120px;
+  border: 1px solid #c8c8c8!important;
+  //border: none!important;
+  //background-color: #007ad9!important;
+}
+
+/deep/.ui-paginator{
+  position: fixed;
+  width: 100vw;
+}
+
+/deep/.ui-table-summary{
+  position: fixed;
+  width: 100vw;
+  bottom: 0px;
+}
