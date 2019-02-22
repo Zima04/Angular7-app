@@ -1,6 +1,7 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { BetsTableComponent } from './bets-table.component';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {BetsTableComponent} from './bets-table.component';
+import {KeyFilterModule} from 'primeng/keyfilter';
 import {
   ButtonModule,
   CalendarModule, CodeHighlighterModule,
@@ -13,10 +14,19 @@ import {
 } from 'primeng/primeng';
 import {FormsModule} from '@angular/forms';
 import {TableModule} from 'primeng/table';
+import {FilterNumbersComponent} from '../../components/filter-numbers/filter-numbers.component';
+import {DragDropModule} from 'primeng/dragdrop';
+import {DragDropComponent} from '../../components/drag-drop/drag-drop.component';
 
 @NgModule({
-  declarations: [BetsTableComponent],
+  declarations: [
+    BetsTableComponent,
+    FilterNumbersComponent,
+    DragDropComponent
+  ],
   imports: [
+    KeyFilterModule,
+    DragDropModule,
     TableModule,
     CommonModule,
     DialogModule,
@@ -40,4 +50,5 @@ import {TableModule} from 'primeng/table';
     CodeHighlighterModule
   ]
 })
-export class BetsTableModule { }
+export class BetsTableModule {
+}

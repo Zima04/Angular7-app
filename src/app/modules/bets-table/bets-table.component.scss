@@ -1,5 +1,15 @@
+/deep/ th{
+  min-width: 60px !important;
+  max-width: 60px!important;
+}
+
+/deep/td{
+  min-width: 60px!important;
+  max-width: 60px!important;
+}
+
 /deep/.ui-table{
-  padding-top: 260px!important;
+  padding-top: 120px!important;
 }
 
 /deep/.ui-table table{
@@ -22,20 +32,44 @@
 }
 
 /deep/.ui-table-caption{
-  position: fixed!important;
-  top: 120px;
+  //position: fixed!important;
+  //top: 120px;
   border: 1px solid #c8c8c8!important;
   //border: none!important;
   //background-color: #007ad9!important;
 }
 
 /deep/.ui-paginator{
-  position: fixed;
+  //position: fixed;
   width: 100vw;
 }
 
 /deep/.ui-table-summary{
-  position: fixed;
+  //position: fixed;
   width: 100vw;
   bottom: 0px;
+}
+
+/deep/.ui-table p-sorticon{
+  position: relative;
+  top:-82px;
+}
+
+
+th.rotate {
+  /* Something you can count on */
+  height: 170px;
+  white-space: nowrap;
+
+  div {
+    transform:
+      /* Magic Numbers */
+    translate(0px, 66px) rotate(270deg);
+    width: 35px;
+
+    th.rotate > div > span {
+      border-bottom: 1px solid #ccc;
+      padding: 5px 10px;
+    }
+  }
 }

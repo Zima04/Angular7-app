@@ -35,14 +35,17 @@ export class BetsTableComponent implements OnInit {
   selectedByClick: any = [];
 
   resultData: any;
-  statisticTemp: Statistic [] = [{
+  filteredData: any;
+
+  statisticTemp: Statistic [] = [
+    {
     League: 'BY1',
     Host: 'Naftanasd',
     Guest: 'FuckTeam',
     Goals1: 1,
     Goals2: 3,
-    Attacks1: 12,
-    Attacks2: 23,
+    Attacks1: 4,
+    Attacks2: 2,
     DangerousAttacks1: 24,
     DangerousAttacks2: 25,
     DaRatio: 133,
@@ -64,7 +67,7 @@ export class BetsTableComponent implements OnInit {
     Goals1: 1,
     Goals2: 3,
     Attacks1: 12,
-    Attacks2: 23,
+    Attacks2: 1,
     DangerousAttacks1: 24,
     DangerousAttacks2: 25,
     DaRatio: 133,
@@ -85,8 +88,8 @@ export class BetsTableComponent implements OnInit {
     Guest: 'Lol',
     Goals1: 1,
     Goals2: 3,
-    Attacks1: 12,
-    Attacks2: 23,
+    Attacks1: 222,
+    Attacks2: 6,
     DangerousAttacks1: 24,
     DangerousAttacks2: 25,
     DaRatio: 133,
@@ -225,7 +228,7 @@ export class BetsTableComponent implements OnInit {
       ...this.selectedColumnsBets
     ];
 
-    this.resultData = this.makeResultData();
+    this.filteredData = this.resultData = this.makeResultData();
     console.log(this.resultData);
 
   }
@@ -248,9 +251,68 @@ export class BetsTableComponent implements OnInit {
       ...this.selectedColumnsBets];
   }
 
-  onRowExpand(cc) {
-    console.log(cc);
-    //logs the entire object which is clicked
+  // filterData(filterParams: any) {
+  //   if (filterParams) {
+  //     if (!filterParams.min && !filterParams.max) {
+  //       console.log('del');
+  //       this.filteredData = this.filteredData.filter(item => {
+  //         return item[filterParams.columnName] >= 0 && item[filterParams.columnName] <= 99999999;
+  //       });
+  //     }
+  //     if (!filterParams.min) {
+  //       filterParams.min = 0;
+  //     }
+  //     if (!filterParams.max) {
+  //       filterParams.max = 99999999;
+  //     }
+  //     this.filteredData = this.filteredData.filter(item => {
+  //       return item[filterParams.columnName] >= filterParams.min && item[filterParams.columnName] <= filterParams.max;
+  //     });
+  //   } else {
+  //     this.filteredData = this.resultData;
+  //   }
+
+
+  arrayOfFilters: any = [];
+
+  filterData(filterParams: FilterParams) {
+    if (filterParams) {
+      console.log(this.arrayOfFilters);
+      if (!filterParams.min && !filterParams.max) {
+
+        this.arrayOfFilters = this.arrayOfFilters.filter((item: FilterParams) => {
+          return item.columnName != filterParams.columnName;
+        });
+        console.log(this.arrayOfFilters);
+      } else {
+        this.arrayOfFilters.push(filterParams);
+      }
+      if (!filterParams.min) {
+        filterParams.min = 0;
+      }
+      if (!filterParams.max) {
+        filterParams.max = 99999999;
+      }
+      let currentData = this.resultData;
+      this.arrayOfFilters.forEach((itemFilterParams: FilterParams) => {
+        this.filteredData = currentData.filter(item => {
+          return item[itemFilterParams.columnName] >= itemFilterParams.min && item[itemFilterParams.columnName] <= itemFilterParams.max;
+        });
+        currentData = this.filteredData;
+        console.log(this.filteredData);
+      });
+
+    } else {
+      this.filteredData = this.resultData;
+      this.arrayOfFilters = [];
+    }
   }
 
+}
+
+
+interface FilterParams {
+  max: number;
+  min: number;
+  columnName: string;
 }

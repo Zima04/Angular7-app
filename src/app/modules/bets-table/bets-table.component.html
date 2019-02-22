@@ -1,12 +1,16 @@
-<p-table #dt [value]="resultData" dataKey="EventId"
+<p-table #dt [value]="filteredData" dataKey="EventId"
          [expandedRowKeys]="expandedRows"
          rowExpandMode="single"
          expandableRows="true"
-         (onRowExpand)="onRowExpand($event)"
          [columns]="selectedColumns"
          [reorderableColumns]="true"
          [paginator]="true"
          [rows]="10"
+         [scrollable]="true"
+         [autoLayout]="true"
+         scrollHeight="200px"
+         [style]="{width:'100%'}"
+         [resizableColumns]="true"
          sortMode="multiple"
          selectionMode="multiple" [(selection)]="selectedByClick">
   <ng-template pTemplate="caption">
@@ -32,21 +36,31 @@
       </div>
     </div>
     <div class="download-container">
-      <button type="button" pButton icon="pi pi-file" iconPos="left" label="Download all data" (click)="dt.exportCSV()"></button>
-      <button type="button" pButton icon="pi pi-file" iconPos="left" label="Download selection data" (click)="dt.exportCSV({selectionOnly:true})"></button>
+      <button type="button" pButton icon="pi pi-file" iconPos="left" label="Download all data"
+              (click)="dt.exportCSV()"></button>
+      <button type="button" pButton icon="pi pi-file" iconPos="left" label="Download selection data"
+              (click)="dt.exportCSV({selectionOnly:true})"></button>
     </div>
+  </ng-template>
+  <ng-template pTemplate="colgroup" let-columns>
+    <colgroup>
+      <col *ngFor="let col of columns" style="width:250px" >
+    </colgroup>
   </ng-template>
   <ng-template pTemplate="header" let-columns>
     <tr>
-      <th rowspan="4" colspan="1"></th>
-      <th rowspan="4" colspan="1">№</th>
+      <th rowspan="2" colspan="1"></th>
+      <th rowspan="2" colspan="1">№</th>
       <th [colSpan]="selectedColumnsStatistic.length">Statistic</th>
       <th [colSpan]="selectedColumnsEvents.length">Event</th>
       <th [colSpan]="selectedColumnsBets.length">Bet</th>
     </tr>
     <tr>
-      <th *ngFor="let col of columns" pReorderableColumn [pSortableColumn]="col.field">
-        {{col.header}}
+      <th class="rotate" *ngFor="let col of columns"
+          pReorderableColumn
+          [pSortableColumn]="col.field"
+          pResizableColumn>
+        <div>{{col.header}}</div>
         <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
                     ariaLabelDesc="Activate to sort in descending order"
                     ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
@@ -59,15 +73,15 @@
                let-expanded="expanded"
                let-i="rowIndex">
     <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex">
-      <td>
-        <a href="#" [pRowToggler]="rowData">
+      <td class="ui-resizable-column">
+        <a href="#" [pRowToggler]="rowData" >
           <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
         </a>
       </td>
-      <td rowspan="1" colspan="1">
+      <td class="ui-resizable-column">
         {{i + 1}}
       </td>
-      <td *ngFor="let col of columns">
+      <td *ngFor="let col of columns" class="ui-resizable-column">
         {{rowData[col.field]}}
       </td>
     </tr>
@@ -85,13 +99,6 @@
       </td>
     </tr>
   </ng-template>
-  <!--<ng-template pTemplate="footer">-->
-  <!--<tr>-->
-  <!--<td colspan="3">Totals</td>-->
-  <!--<td>$506,202</td>-->
-  <!--<td>$531,020</td>-->
-  <!--</tr>-->
-  <!--</ng-template>-->
   <ng-template pTemplate="summary">
     <ul>
       <li *ngFor="let car of selectedByClick" style="text-align: left">
@@ -101,3 +108,4 @@
   </ng-template>
 </p-table>
 
+<drag-drop [columnsName]="selectedColumns" (filterData)="filterData($event)"></drag-drop>
