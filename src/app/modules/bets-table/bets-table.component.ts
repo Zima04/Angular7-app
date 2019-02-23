@@ -3,6 +3,7 @@ import {Statistic} from '../../interfaces/statistic';
 import {Event} from '../../interfaces/event';
 import {Bet} from '../../interfaces/bet';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import {TableDataService} from '../../services/table-data.service';
 
 @Component({
   selector: 'bets-table',
@@ -39,72 +40,72 @@ export class BetsTableComponent implements OnInit {
 
   statisticTemp: Statistic [] = [
     {
-    League: 'BY1',
-    Host: 'Naftanasd',
-    Guest: 'FuckTeam',
-    Goals1: 1,
-    Goals2: 3,
-    Attacks1: 4,
-    Attacks2: 2,
-    DangerousAttacks1: 24,
-    DangerousAttacks2: 25,
-    DaRatio: 133,
-    Posession1: 12,
-    Posession2: 10,
-    OnTarget1: 9,
-    OnTarget2: 4,
-    OffTarget1: 12,
-    OffTarget2: 5,
-    Corner1: 1,
-    Corner2: 3,
-    Time: '88',
-    Criterion: 34,
-    TargetType: 'type'
-  }, {
-    League: 'BY2',
-    Host: 'Na',
-    Guest: 'BA3',
-    Goals1: 1,
-    Goals2: 3,
-    Attacks1: 12,
-    Attacks2: 1,
-    DangerousAttacks1: 24,
-    DangerousAttacks2: 25,
-    DaRatio: 133,
-    Posession1: 12,
-    Posession2: 10,
-    OnTarget1: 9,
-    OnTarget2: 4,
-    OffTarget1: 12,
-    OffTarget2: 5,
-    Corner1: 1,
-    Corner2: 3,
-    Time: '88',
-    Criterion: 34,
-    TargetType: 'type'
-  }, {
-    League: 'BY3',
-    Host: 'Fuck',
-    Guest: 'Lol',
-    Goals1: 1,
-    Goals2: 3,
-    Attacks1: 222,
-    Attacks2: 6,
-    DangerousAttacks1: 24,
-    DangerousAttacks2: 25,
-    DaRatio: 133,
-    Posession1: 12,
-    Posession2: 10,
-    OnTarget1: 9,
-    OnTarget2: 4,
-    OffTarget1: 12,
-    OffTarget2: 5,
-    Corner1: 1,
-    Corner2: 3,
-    Time: '88',
-    Criterion: 34,
-    TargetType: 'type'
-  }];
+      League: 'BY1',
+      Host: 'Naftanasd',
+      Guest: 'FuckTeam',
+      Goals1: 1,
+      Goals2: 3,
+      Attacks1: 4,
+      Attacks2: 2,
+      DangerousAttacks1: 24,
+      DangerousAttacks2: 25,
+      DaRatio: 133,
+      Posession1: 12,
+      Posession2: 10,
+      OnTarget1: 9,
+      OnTarget2: 4,
+      OffTarget1: 12,
+      OffTarget2: 5,
+      Corner1: 1,
+      Corner2: 3,
+      Time: '88',
+      Criterion: 34,
+      TargetType: 'type'
+    }, {
+      League: 'BY2',
+      Host: 'Na',
+      Guest: 'BA3',
+      Goals1: 1,
+      Goals2: 3,
+      Attacks1: 12,
+      Attacks2: 1,
+      DangerousAttacks1: 24,
+      DangerousAttacks2: 25,
+      DaRatio: 133,
+      Posession1: 12,
+      Posession2: 10,
+      OnTarget1: 9,
+      OnTarget2: 4,
+      OffTarget1: 12,
+      OffTarget2: 5,
+      Corner1: 1,
+      Corner2: 3,
+      Time: '88',
+      Criterion: 34,
+      TargetType: 'type'
+    }, {
+      League: 'BY3',
+      Host: 'Fuck',
+      Guest: 'Lol',
+      Goals1: 1,
+      Goals2: 3,
+      Attacks1: 222,
+      Attacks2: 6,
+      DangerousAttacks1: 24,
+      DangerousAttacks2: 25,
+      DaRatio: 133,
+      Posession1: 12,
+      Posession2: 10,
+      OnTarget1: 9,
+      OnTarget2: 4,
+      OffTarget1: 12,
+      OffTarget2: 5,
+      Corner1: 1,
+      Corner2: 3,
+      Time: '88',
+      Criterion: 34,
+      TargetType: 'type'
+    }];
   eventsTemp: Event [] = [
     {
       Id: 11,
@@ -171,6 +172,10 @@ export class BetsTableComponent implements OnInit {
 
   expandedRows: {} = {};
 
+  constructor(private httpClient: TableDataService) {
+
+  }
+
   ngOnInit() {
 
     this.colsStatistic = [
@@ -204,7 +209,7 @@ export class BetsTableComponent implements OnInit {
     ];
 
     this.colsBets = [
-      {field: 'BetTime', header: 'BetTime'},
+      {field: 'DateTime', header: 'DateTime'},
       {field: 'Target', header: 'Target'},
       {field: 'OddId', header: 'OddId'},
       {field: 'PivotBias', header: 'PivotBias'},
@@ -215,7 +220,7 @@ export class BetsTableComponent implements OnInit {
       {field: 'BetStatus', header: 'BetStatus'},
       {field: 'MinStake', header: 'MinStake'},
       {field: 'MaxStake', header: 'MaxStake'},
-      {field: 'EventId', header: 'EventId'},
+      // {field: 'Id', header: 'Id'},
     ];
 
     this.selectedColumnsStatistic = this.colsStatistic;
@@ -228,18 +233,28 @@ export class BetsTableComponent implements OnInit {
       ...this.selectedColumnsBets
     ];
 
-    this.filteredData = this.resultData = this.makeResultData();
-    console.log(this.resultData);
+    this.httpClient.getTableData().subscribe(res => {
+      this.resultData = res;
 
+      this.filteredData = this.resultData = this.makeResultData(res);
+      console.log(this.resultData);
+    });
   }
 
-  makeResultData() {
+  makeResultData(data: Array<any>) {
     let result = [];
-
-    for (let i = 0; i < this.statisticTemp.length; i++) {
-      console.log(Object.assign(this.statisticTemp[i], this.eventsTemp[i], this.betsTemp[i]));
-      result.push(Object.assign(this.statisticTemp[i], this.eventsTemp[i], this.betsTemp[i]));
-    }
+    console.log(data.length);
+    result = data.map(item => {
+      // console.log(JSON.parse(JSON.stringify(item)));
+      const obj = Object.assign({}, item.Statistic,);
+      obj['Bets'] = item.Bets;
+      return obj;
+    });
+    // for (let i = 0; i < this.statisticTemp.length; i++) {
+    //   console.log(Object.assign(this.statisticTemp[i], this.eventsTemp[i], this.betsTemp[i]));
+    //   result.push(Object.assign(this.statisticTemp[i], this.eventsTemp[i], this.betsTemp[i]));
+    // }
+    console.log(result);
 
     return result;
   }
@@ -308,6 +323,11 @@ export class BetsTableComponent implements OnInit {
     }
   }
 
+
+  onRowSelect(event){
+    console.log(event,
+      this.selectedByClick)
+  }
 }
 
 

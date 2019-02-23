@@ -17,6 +17,7 @@ import {TableModule} from 'primeng/table';
 import {FilterNumbersComponent} from '../../components/filter-numbers/filter-numbers.component';
 import {DragDropModule} from 'primeng/dragdrop';
 import {DragDropComponent} from '../../components/drag-drop/drag-drop.component';
+import {TableDataService} from '../../services/table-data.service';
 
 @NgModule({
   declarations: [

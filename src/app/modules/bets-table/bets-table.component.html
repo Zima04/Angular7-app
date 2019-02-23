@@ -1,6 +1,7 @@
-<p-table #dt [value]="filteredData" dataKey="EventId"
+<p-table #dt [value]="filteredData"
+         dataKey="League"
          [expandedRowKeys]="expandedRows"
-         rowExpandMode="single"
+         [rowExpandMode]="'single'"
          expandableRows="true"
          [columns]="selectedColumns"
          [reorderableColumns]="true"
@@ -8,11 +9,12 @@
          [rows]="10"
          [scrollable]="true"
          [autoLayout]="true"
-         scrollHeight="200px"
          [style]="{width:'100%'}"
          [resizableColumns]="true"
          sortMode="multiple"
-         selectionMode="multiple" [(selection)]="selectedByClick">
+         selectionMode="multiple"
+         [(selection)]="selectedByClick"
+         (onRowSelect)="onRowSelect($event)">
   <ng-template pTemplate="caption">
     <div class="filters-container">
       <div>
@@ -72,7 +74,7 @@
                let-columns="columns"
                let-expanded="expanded"
                let-i="rowIndex">
-    <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex">
+    <tr [pSelectableRow]="rowData" [pSelectableRowIndex]=i>
       <td class="ui-resizable-column">
         <a href="#" [pRowToggler]="rowData" >
           <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
@@ -81,28 +83,34 @@
       <td class="ui-resizable-column">
         {{i + 1}}
       </td>
-      <td *ngFor="let col of columns" class="ui-resizable-column">
+      <td *ngFor="let col of selectedColumnsStatistic" class="ui-resizable-column">
         {{rowData[col.field]}}
+      </td>
+      <td *ngFor="let col of selectedColumnsEvents" class="ui-resizable-column">
+        {{rowData[col.field]}}
+      </td>
+      <td *ngFor="let col of selectedColumnsBets" class="ui-resizable-column">
+        {{rowData['Bets'][0][col.field]}}
       </td>
     </tr>
 
   </ng-template>
   <ng-template pTemplate="rowexpansion" let-rowData let-columns="columns">
-    <tr>
+    <tr *ngFor="let bet of rowData['Bets']">
       <td rowspan="1" colspan="2"></td>
       <td *ngFor="let col of selectedColumnsStatistic">
       </td>
       <td *ngFor="let col of selectedColumnsEvents">
       </td>
       <td *ngFor="let col of selectedColumnsBets">
-        {{rowData[col.field]}}
+        {{bet[col.field]}}
       </td>
     </tr>
   </ng-template>
   <ng-template pTemplate="summary">
     <ul>
-      <li *ngFor="let car of selectedByClick" style="text-align: left">
-        {{car.EventId}}
+      <li *ngFor="let item of selectedByClick" style="text-align: left">
+        {{item.EventId}}
       </li>
     </ul>
   </ng-template>

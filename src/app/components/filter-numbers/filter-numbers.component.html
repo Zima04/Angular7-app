@@ -1,0 +1,17 @@
+<div>
+  <div class="filter-number-container">
+    <span class="close pi pi-times" (click)="deleteFilter()"></span>
+    <h4>{{columnName}} filter</h4>
+    <div class="inputs-container">
+      <div class="ui-g-12 ui-md-4">
+        <input type="text" [(ngModel)]="min" pInputText pKeyFilter="int" placeholder="Min">
+      </div>
+      <div class="ui-g-12 ui-md-4">
+        <input type="text" [(ngModel)]="max" pInputText pKeyFilter="int" placeholder="Max">
+      </div>
+    </div>
+    <div>
+      <button pButton type="button" label="Filter {{columnName}}" (click)="sendData()"></button>
+    </div>
+  </div>
+</div>

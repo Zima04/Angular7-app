@@ -1,0 +1,22 @@
+<div class="ui-g">
+  <div class="ui-g-12 ui-md-6 ui-g-nopad drag-column">
+    <h3 style="padding-left: 10px">Drag items that you want to filter:</h3>
+    <ul style="margin:0;padding:0">
+      <li *ngFor="let column of availableFilters" class="ui-helper-clearfix" pDraggable="pnl"
+          (onDragStart)="dragStart($event,column)" (onDragEnd)="dragEnd($event)">
+        <span class="column-name">{{column.header}}</span>
+      </li>
+    </ul>
+  </div>
+  <div class="ui-g-12 ui-md-6 drop-column drop-container" pDroppable="pnl"
+       (onDrop)="drop($event)" [ngClass]="{'ui-highlight-car':draggedFilter}">
+    <h3>Items to filter:</h3>
+    <div class="droppable-items-container">
+      <div *ngFor="let i of selectedFilters;let index = index" class="droppable-item">
+        <span><filter-numbers [columnName]="i.header"
+                              (deleteFilterEmit)="deleteFilterItem($event,index)"
+                              (sendFilterData)="updateTableData($event)"></filter-numbers></span>
+      </div>
+    </div>
+  </div>
+</div>

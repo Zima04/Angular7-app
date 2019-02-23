@@ -1,0 +1,25 @@
+li {
+  padding: 5px 10px;
+
+  &:hover {
+    color: #007ad9;
+    cursor: pointer;
+  }
+}
+
+.drop-container {
+  background-color: #cccccc;
+  display: flex;
+  flex-direction: column;
+
+  .droppable-items-container {
+    display: flex;
+    flex-wrap: wrap;
+
+
+    .droppable-item {
+      flex: 1;
+      padding-bottom: 10px;
+    }
+  }
+}
